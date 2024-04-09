@@ -1,0 +1,30 @@
+build:
+  gpu: false
+  python_version: "3.10"
+  run:
+    - apt update -y && apt install -y software-properties-common python3-launchpadlib && apt update -y && add-apt-repository -y ppa:git-core/ppa && apt update -y
+    - apt install -y gcc g++ aria2 git git-lfs wget libgl1 libglib2.0-0 ffmpeg cmake libgtk2.0-0 libopenmpi-dev libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev
+    - pip install torch==2.2.0+cu121 torchvision==0.17.0+cu121 torchaudio==2.2.0+cu121 --extra-index-url https://download.pytorch.org/whl/cu121 -U
+    - pip install notebook pyngrok pickleshare ipywidgets imageio-ffmpeg pandas numpy==1.23.5 loguru==0.7.2 smplx ConfigArgParse==1.7 trimesh==3.23.5 lmdb==1.4.1 fasttext-wheel textgrid==1.5 pyvirtualdisplay==3.0 pyrender matplotlib==3.7.3 opencv_python==4.8.1.78 pyarrow scikit_learn==1.3.2 soundfile==0.12.1 librosa==0.10.1 termcolor==2.4.0 tqdm==4.66.1 transformers==4.35.2 moviepy==1.0.3
+    - GIT_LFS_SKIP_SMUDGE=1 git clone -b dev https://github.com/camenduru/EMAGE-hf /content/EMAGE-hf
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/emage_audio_175.bin -d /content/EMAGE-hf/EMAGE -o emage_audio_175.bin
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/pretrained_vq/hands_vertex_1layer_710.bin -d /content/EMAGE-hf/EMAGE/pretrained_vq -o hands_vertex_1layer_710.bin
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/pretrained_vq/last_1700_foot.bin -d /content/EMAGE-hf/EMAGE/pretrained_vq -o last_1700_foot.bin
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/pretrained_vq/last_790_face_v2.bin -d /content/EMAGE-hf/EMAGE/pretrained_vq -o last_790_face_v2.bin
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/pretrained_vq/lower_foot_600.bin -d /content/EMAGE-hf/EMAGE/pretrained_vq -o lower_foot_600.bin
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/pretrained_vq/upper_vertex_1layer_710.bin -d /content/EMAGE-hf/EMAGE/pretrained_vq -o upper_vertex_1layer_710.bin
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/smplx_models/smplx/SMPLX_NEUTRAL_2020.npz -d /content/EMAGE-hf/EMAGE/smplx_models/smplx -o SMPLX_NEUTRAL_2020.npz
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/smplxflame_30/2_scott_0_1_1.npz -d /content/EMAGE-hf/EMAGE/test_sequences/smplxflame_30 -o 2_scott_0_1_1.npz
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/smplxflame_30/2_scott_0_2_2.npz -d /content/EMAGE-hf/EMAGE/test_sequences/smplxflame_30 -o 2_scott_0_2_2.npz
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/smplxflame_30/2_scott_0_3_3.npz -d /content/EMAGE-hf/EMAGE/test_sequences/smplxflame_30 -o 2_scott_0_3_3.npz
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/smplxflame_30/2_scott_0_4_4.npz -d /content/EMAGE-hf/EMAGE/test_sequences/smplxflame_30 -o 2_scott_0_4_4.npz
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/wave16k/2_scott_0_1_1.wav -d /content/EMAGE-hf/EMAGE/test_sequences/wave16k -o 2_scott_0_1_1.wav
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/wave16k/2_scott_0_2_2.wav -d /content/EMAGE-hf/EMAGE/test_sequences/wave16k -o 2_scott_0_2_2.wav
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/wave16k/2_scott_0_3_3.wav -d /content/EMAGE-hf/EMAGE/test_sequences/wave16k -o 2_scott_0_3_3.wav
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/wave16k/2_scott_0_4_4.wav -d /content/EMAGE-hf/EMAGE/test_sequences/wave16k -o 2_scott_0_4_4.wav
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/weights/AESKConv_240_100.bin -d /content/EMAGE-hf/EMAGE/test_sequences/weights -o AESKConv_240_100.bin
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/weights/mean_vel_smplxflame_30.npy -d /content/EMAGE-hf/EMAGE/test_sequences/weights -o mean_vel_smplxflame_30.npy
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/weights/vocab.pkl -d /content/EMAGE-hf/EMAGE/test_sequences/weights -o vocab.pkl
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/outputs/audio2pose/custom/hf/999/gt_2_scott_0_3_3.npz -d /content/EMAGE-hf/outputs/audio2pose/custom/hf/999 -o gt_2_scott_0_3_3.npz
+    - aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/outputs/audio2pose/custom/hf/999/res_2_scott_0_3_3.npz -d /content/EMAGE-hf/outputs/audio2pose/custom/hf/999 -o res_2_scott_0_3_3.npz
+predict: "/src/predict.py:Predictor"
